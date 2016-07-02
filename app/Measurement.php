@@ -2,22 +2,34 @@
 
 namespace App;
 
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Validator;
 
-class Measurements
+class Measurement
 {
-   public static function insertFromFile(Request $request, &$success) {
+    public $station_id;
+    public $pollution_type;
+    public $date;
+
+   public function insertFromFile(UploadedFile $file, &$success) {
+
+        $success = false;
 
         // Pollution types to string
-        $pol_type = implode(",", Constants::POL_TYPES);
+        $pol_type_arr = implode(",", Constants::POL_TYPES);
 
         // Create the rules for validation
-        $validator = Validator::make($request->all(), [
+        $validator = Validator::make([
+            'pollution_type' => $this->pollution_type,
+            'station_code' => $this->station_id,
+            'file' => $file
+        ], [
             //'year' => 'required|numeric|between:1987,'.date("Y"),
-            'pol_type' => 'required|max:5|in:'.$pol_type,
-            'st_code' => 'required|max:5|exists:stations,id',
+            'pollution_type' => 'required|max:5|in:'.$pol_type_arr,
+            'station_code' => 'required|max:5|exists:stations,id',
             'file' => 'required|file|mimes:csv,txt'
         ]);
 
@@ -35,7 +47,6 @@ class Measurements
         $values = [];
 
         // Read file as much as possible
-        $file = $request->file('file');
         $input = fopen($file->getRealPath(), "r");
         while(!feof($input)) {
 
@@ -63,14 +74,15 @@ class Measurements
 
             // Check for format error and return
             if ($format_error) {
-                $validator->errors()->add('file', 'Bad file format detected');
-                return $validator;
+                break;
             }
         }
         fclose($input);
 
-        $st_code = $request->input('st_code');
-        $pol_type = $request->input('pol_type');
+       if ($format_error || count($values) == 0) {
+           $validator->errors()->add('file', 'Bad file format detected');
+           return $validator;
+       }
 
         // Everything is right so we insert all the values
         // with a transaction to the database
@@ -81,7 +93,7 @@ class Measurements
            // A set of queries; if one fails, an exception should be thrown
            foreach ($values as $date => $measurements) {
                $id = DB::table('measurements')->insertGetId(
-                   ['station_id' => $st_code, 'pollution_type' => $pol_type, 'date' => $date]
+                   ['station_id' => $this->station_id, 'pollution_type' => $this->pollution_type, 'date' => $date]
                );
                $insert_values = [];
                foreach ($measurements as $indx => $value) {
@@ -97,11 +109,11 @@ class Measurements
            // i.e. no query has failed, and we can commit the transaction
            DB::commit();
            $success = true;
-       } catch (Exception $e) {
+       } catch (QueryException  $e) {
            // An exception has been thrown
            // We must rollback the transaction
            DB::rollBack();
-           $validator->errors()->add('file', $e.__toString());
+           $validator->errors()->add('file', 'Possible duplicate entries in file');
        }
        return $validator;
     }

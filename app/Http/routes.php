@@ -24,6 +24,7 @@ Route::group(['prefix' => 'admin'], function () {
     
     Route::get('/', 'AdminController@getIndex');
     Route::post('/upload', 'AdminController@uploadFile');
+    Route::post('/station', 'AdminController@insertStation');
 });
 
 

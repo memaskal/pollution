@@ -43,14 +43,14 @@ function getStations() {
 
 function createMarker(name, id, latitude, longitude) {
     var marker = new google.maps.Marker({
-        position: {lat: parseFloat(latitude), lng: parseFloat(longitude)},
+        position: new google.maps.LatLng(latitude, longitude),
         map: map,
         title: name,
         id: id,
     });
 
     var pindx = points.getLength();
-    points.push({location: new google.maps.LatLng(parseFloat(latitude), parseFloat(longitude)), weight: 1});
+    points.push({location: new google.maps.LatLng(latitude, longitude), weight: 1});
     marker.pindx = pindx;
 
     var content = 'Station Name : ' + name + '<br>'

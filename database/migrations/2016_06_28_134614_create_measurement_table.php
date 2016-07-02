@@ -21,6 +21,8 @@ class CreateMeasurementTable extends Migration
             $table->foreign('station_id')->references('id')->on('stations')
                     ->onDelete('cascade')
                     ->onUpdate('cascade');
+
+            $table->unique(['station_id', 'pollution_type', 'date']);
         });
     }
 

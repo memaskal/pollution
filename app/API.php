@@ -39,7 +39,7 @@ class API
         // Log request
         API::newRequest($user->id, API::STATION_REQ);
 
-        return Stations::getStations();
+        return Station::getStations();
     }
 
     protected static function getAbsValue(Request $request, $user) {
