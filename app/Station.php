@@ -14,8 +14,11 @@ class Station
     public $latitude;
     public $longitude;
 
-    public static function getStations() {
-        return DB::table('stations')->get();
+    public static function getStations($pagination = 0) {
+        if ($pagination <= 0) {
+            return DB::table('stations')->get();
+        }
+        return DB::table('stations')->paginate($pagination);
     }
 
     public function insert( &$success ) {
@@ -50,6 +53,30 @@ class Station
             $success = true;
         } catch (QueryException  $e) {
             $validator->errors()->add('Fatal', 'Database Error');
+        }
+        return $validator;
+    }
+
+    public function delete( &$success ) {
+
+        $success = false;
+        $validator = Validator::make([
+            'station_code' => $this->id,
+        ], [
+            'station_code' => 'required|max:5',
+        ]);
+
+        if ($validator->fails()) {
+            return $validator;
+        }
+
+        try {
+            DB::table('stations')
+                ->where('id', '=', $this->id)
+                ->delete();
+            $success = true;
+        } catch (QueryException  $e) {
+            $validator->errors()->add('Fatal', 'Station code don\'t Exist');
         }
         return $validator;
     }

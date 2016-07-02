@@ -40,33 +40,7 @@
 </head>
 <body>
 <!-- Navigation -->
-<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-    <div class="container">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="#">Envioromental Monitoring</a>
-        </div>
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav">
-                <li>
-                    <a href="#" id="showAbsValue">Absolute pollution values</a>
-                </li>
-                <li>
-                    <a href="#" id="showAvgValue">Average pollution values</a>
-                </li>
-            </ul>
-        </div>
-        <!-- /.navbar-collapse -->
-    </div>
-    <!-- /.container -->
-</nav>
+
 
 <!-- Page Content -->
 <div class="container">
@@ -119,7 +93,7 @@
                     <input class="form-control-file" type="file" id="file" name="file" required>
                 </div>
 
-                <input type="submit" class="btn btn-info pull-right" value="Upload">
+                <button type="submit" class="btn btn-primary">Upload</button>
             </form>
         </div>
     </div>
@@ -132,18 +106,22 @@
 
                 <div class="form-group">
                     <label for="st_codeInput">Station Code</label>
-                    <input type="text" class="form-control" name="st_code" id="st_codeInput" maxlength="5" placeholder="PAT" required/>
+                    <input type="text" class="form-control" name="st_code" id="st_codeInput"
+                           maxlength="5" placeholder="PAT" required value="{{ old('st_code') }}"/>
                 </div>
 
                 <div class="form-group">
                     <label for="st_nameInput">Station Name</label>
-                    <input type="text" class="form-control" name="st_name" id="st_nameInput" maxlength="30" placeholder="Σταθμός Πάτρας (ΠΑ.ΠΑ.)" required/>
+                    <input type="text" class="form-control" name="st_name" id="st_nameInput"
+                           maxlength="30" placeholder="Σταθμός Πάτρας (ΠΑ.ΠΑ.)" required value="{{ old('st_name') }}"/>
                 </div>
 
                 <div class="form-group">
                     <label for="st_lat">Station Location (Lat - Lng)</label>
-                    <input type="number" class="form-control" name="st_lat" id="st_lat" step="1e-14" required/>
-                    <input type="number" class="form-control" name="st_lng" id="st_lng" step="1e-14" required/>
+                    <input type="text" class="form-control" name="st_lat" id="st_lat"
+                           required value="{{ old('st_lat') }}"/>
+                    <input type="text" class="form-control" name="st_lng" id="st_lng"
+                           required value="{{ old('st_lng') }}"/>
                 </div>
 
                 <div class="form-group">
@@ -151,7 +129,7 @@
                     <div id="st_address"></div>
                 </div>
 
-                <input type="submit" class="btn btn-info pull-right" value="Insert">
+                <button type="submit" class="btn btn-primary">Insert</button>
             </form>
         </div>
         <div class="col-md-8">
@@ -184,7 +162,18 @@
 
         geocoder = new google.maps.Geocoder();
 
-        var latLng = new google.maps.LatLng(38.2848733501699, 21.7881073760987);
+        var latLng;
+        var lat = document.getElementById('st_lat'),
+            lng = document.getElementById('st_lng');
+        if ( lat.value === '' && lng.value == '') {
+            // Default first location
+            latLng = new google.maps.LatLng(38.2848733501699,
+                                            21.7881073760987);
+        } else {
+            latLng = new google.maps.LatLng(lat.value,
+                                            lng.value);
+        }
+
         map = new google.maps.Map(document.getElementById('map_canvas'), {
             zoom: 9,
             center: latLng,
@@ -197,19 +186,20 @@
             map: map,
         });
 
-        geocodePosition(latLng);
+
         updateMarkerPosition(latLng);
+        geocodePosition(latLng);
 
         // Add dragging event listeners.
-        google.maps.event.addListener(marker, 'dragstart', function() {
+        marker.addListener('dragstart', function() {
             updateMarkerAddress('Dragging...');
         });
 
-        google.maps.event.addListener(marker, 'drag', function() {
+        marker.addListener('drag', function() {
             updateMarkerPosition(marker.getPosition());
         });
 
-        google.maps.event.addListener(marker, 'dragend', function() {
+        marker.addListener('dragend', function() {
             geocodePosition(marker.getPosition());
             updateMarkerPosition(marker.getPosition());
         });

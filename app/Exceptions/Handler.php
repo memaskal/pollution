@@ -6,6 +6,8 @@ use Exception;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Psy\Util\Json;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
@@ -45,6 +47,11 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $e)
     {
+        // Return json status code of HttpException when is
+        // thrown at json -> api calls
+        if ($e instanceof HttpException && $request->wantsJson()) {
+            return response()->json(['status' => $e->getStatusCode()]);
+        }
         return parent::render($request, $e);
     }
 }

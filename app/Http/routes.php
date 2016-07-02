@@ -19,18 +19,32 @@ Route::group(['middleware' => 'api'], function () {
 });
 
 
-// for admin
 Route::group(['prefix' => 'admin'], function () {
-    
+
+    // Index page
     Route::get('/', 'AdminController@getIndex');
-    Route::post('/upload', 'AdminController@uploadFile');
-    Route::post('/station', 'AdminController@insertStation');
+
+    // File upload
+    Route::get('/file-upload', 'AdminController@getUploadFile');
+    Route::post('/file-upload', 'AdminController@postUploadFile');
+
+    // Station insert
+    Route::get('/station-insert', 'AdminController@getInsertStation');
+    Route::post('/station-insert', 'AdminController@postInsertStation');
+
+    // Station delete
+    Route::get('/station-delete', 'AdminController@getDeleteStation');
+    Route::delete('/station-delete', 'AdminController@postDeleteStation');
 });
 
 
 Route::group(['prefix' => 'demo'], function () {
 
-    Route::get('/', 'DemoController@getIndex');
+    // Returns the demo index page
+    Route::get('/', function () {
+        return view('pages.demo.index', ['gmap_key' => \App\Constants::GMAP_KEY,
+                                         'pol_types' => \App\Constants::POL_TYPES]);
+    });
 
     // Handles requests to the api
     Route::get('/reqStations', 'DemoRequestsController@getStations');

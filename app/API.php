@@ -5,7 +5,7 @@ namespace App;
 use Illuminate\Http\Request;
 use DB;
 
-class API
+abstract class API
 {
 
     const STATION_REQ    = 1;
@@ -35,10 +35,8 @@ class API
     }
     
     protected static function getStations(Request $request, $user) {
-
         // Log request
         API::newRequest($user->id, API::STATION_REQ);
-
         return Station::getStations();
     }
 
