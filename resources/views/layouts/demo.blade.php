@@ -3,7 +3,7 @@
 <head>
 @include('includes.head')
 <!-- Bootstrap Core CSS -->
-<link href="css/bootstrap.min.css" rel="stylesheet">
+<link href="{{ asset('/css/bootstrap.min.css') }}" rel="stylesheet">
 </head>
 <body>
 <!-- Navigation -->
@@ -27,8 +27,8 @@
 </footer>
 
 <!-- Script Section -->
-<script src="js/jquery.js"></script>
-<script src="js/bootstrap.min.js"></script>
+<script src="{{ asset('js/jquery.js') }}"></script>
+<script src="{{ asset('js/bootstrap.min.js') }}"></script>
 @yield('opt-scripts', '')
 </body>
 </html>

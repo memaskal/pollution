@@ -14,11 +14,8 @@
 /**
  * Enables api middleware for throttle in 60 connections/s
  */
-Route::group(['prefix' => 'api'], function () {
-    Route::get('/{code}',  [
-            'middleware' => 'api',
-            'uses' => 'ApiController@handle'
-    ])->where('code', '[0-9]+');
+Route::group(['prefix' => 'api', 'middleware' => 'api'], function () {
+    Route::get('/{code}', 'ApiController@handle')->where('code', '[0-9]+');
 });
 
 

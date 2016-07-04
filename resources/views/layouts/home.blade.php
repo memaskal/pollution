@@ -7,7 +7,7 @@
 </head>
 <body>
 <!-- Navigation -->
-@include('includes.nav_admin')
+@include('includes.nav_home')
 
 <!-- Page Content -->
 @yield('content')
@@ -27,8 +27,8 @@
 </footer>
 
 <!-- Script Section -->
-<script src="{{ asset('/js/jquery.js') }}"></script>
-<script src="{{ asset('/js/bootstrap.min.js') }}"></script>
+<script src="{{ asset('js/jquery.js') }}"></script>
+<script src="{{ asset('js/bootstrap.min.js') }}"></script>
 @yield('opt-scripts', '')
 </body>
 </html>
