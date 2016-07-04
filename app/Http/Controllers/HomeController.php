@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\APIRequest;
 use App\Http\Requests;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
@@ -24,6 +26,10 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('pages.home.index');
+        $user = Auth::user();
+        return view('pages.home.index', [
+            'user'  => $user,
+            'stats' => APIRequest::getTotalByType($user->id)
+        ]);
     }
 }

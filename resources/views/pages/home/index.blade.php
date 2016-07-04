@@ -1,16 +1,16 @@
-@extends('layouts.home')
-
+@extends('layouts.app') @section('title', '- Home')
 @section('content')
 <div class="container">
     <div class="row">
-        <div class="col-md-10 col-md-offset-1">
-            <div class="panel panel-default">
-                <div class="panel-heading">Welcome</div>
-
-                <div class="panel-body">
-                    Your Application's Landing Page.
-                </div>
-            </div>
+        <div class="col-md-12">
+            <h3> Welcome {{ $user->name }} </h3>
+            <hr>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <h4>API usage for your key: {{ $user->api_token }} </h4>
+            <div id="req_types" style="height:250px"></div>
         </div>
     </div>
 </div>
@@ -20,10 +20,7 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
 <script>
-
-    var donutChart = undefined;
-    var barChart = undefined;
-
+    var donutChart;
     function drawDonutChart( contents ) {
         var data = [];
         $.each(contents, function( index, value ) {
@@ -31,73 +28,11 @@
                 value : value.requests
             });
         });
-        if (donutChart === undefined) {
-            donutChart = Morris.Donut({
-                element: 'req_types',
-                data: data
-            });
-        }
-        else {
-            // forces redraw
-            donutChart.setData(data);
-        }
-    }
-
-    function subNames (str, size) {
-        var subN = str.substr(0,size);
-        if (str.length > size) {
-            subN += '...';
-        }
-        return subN;
-    }
-
-    function drawBarChart( contents ) {
-        var data = [];
-        $.each(contents, function( index, value ) {
-            data.push({ key : subNames(value.api_token, 10),
-                requests : value.total
-            });
-        });
-        if (barChart === undefined) {
-            barChart = Morris.Bar({
-                element: 'top_ten',
-                data: data,
-                xkey: 'key',
-                ykeys: ['requests'],
-                labels: ['Requests'],
-                barRatio: 0.4,
-                xLabelAngle: 35,
-                hideHover: 'auto'
-            });
-        }
-        else {
-            // forces redraw
-            barChart.setData(data);
-        }
-    }
-
-    function updateCounter( contents ) {
-        $('#total_keys').html(contents);
-    }
-
-    function pageRefresher () {
-        // fetch data
-        fetchData('/admin/stats', function (data) {
-            drawDonutChart(data.total_req);
-            drawBarChart(data.top_ten);
-            updateCounter(data.total_keys);
-            setTimeout(pageRefresher, 15000);
-        });
-    };
-
-    function fetchData(url, callback) {
-        $.getJSON(url, function( response ) {
-            if (response.status != 'OK') alert("Error " + response.status);
-            callback(response);
+        donutChart = Morris.Donut({
+            element: 'req_types',
+            data: data
         });
     }
-
-    // Load on document ready
-    $(document).ready(pageRefresher());
+    $(document).ready(drawDonutChart({!! json_encode($stats) !!}));
 </script>
 @endsection

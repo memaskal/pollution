@@ -1,7 +1,7 @@
 <meta charset="utf-8">
 <link rel="shortcut icon" type="image/png" href="/favicon.png"/>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Envioromental Monitoring - @yield('title')</title>
+<title>Envioromental Monitoring @yield('title', '')</title>
 <!-- Custom CSS -->
 <style>
     body{
@@ -23,6 +23,7 @@
         /* Set the fixed height of the footer here */
         height: 60px;
         background-color: #f5f5f5;
+        padding-top:10px;
     }
 </style>
 

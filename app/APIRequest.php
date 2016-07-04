@@ -42,12 +42,16 @@ class APIRequest
         }
     }
 
-    public static function getTotalByType() {
-        return DB::table('requests')
+    public static function getTotalByType($userId = -1) {
+        $query = DB::table('requests')
             ->select(DB::raw('SUM(total) as requests'), 'description')
             ->join('request_types', 'request_type', '=', 'request_types.id')
-            ->groupBy('request_type')
-            ->get();
+            ->groupBy('request_type');
+
+        if ($userId !== -1) {
+            $query = $query->where('user_id', $userId);
+        }
+        return $query->get();
     }
 
     public static function getTenTopUsers() {
@@ -59,4 +63,5 @@ class APIRequest
             ->take(10)
             ->get();
     }
+    
 }

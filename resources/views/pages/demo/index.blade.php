@@ -1,5 +1,4 @@
-@extends('layouts.demo') @section('title', 'Home')
-
+@extends('layouts.app')
 @section('content')
 <div class="container">
     <div class="row">
@@ -88,8 +87,8 @@
 @endsection
 
 @section('opt-scripts')
-    <script src="js/main.js"></script>
-    <script async defer
-            src="https://maps.googleapis.com/maps/api/js?key={{ $gmap_key }}&libraries=visualization&callback=initMap">
-    </script>
+<script src="{{ asset('/js/demo.js') }}"></script>
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key={{ $gmap_key }}&libraries=visualization&callback=initMap">
+</script>
 @endsection

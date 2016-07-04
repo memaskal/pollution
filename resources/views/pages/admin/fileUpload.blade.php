@@ -1,4 +1,4 @@
-@extends('layouts.admin') @section('title', 'File Upload')
+@extends('layouts.app') @section('title', ' - File Upload')
 
 @section('content')
 <div class="container">

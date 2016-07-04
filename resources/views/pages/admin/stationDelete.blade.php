@@ -1,4 +1,4 @@
-@extends('layouts.admin') @section('title', 'Station Delete')
+@extends('layouts.app') @section('title', ' - Station Delete')
 
 @section('content')
 <style>
@@ -93,7 +93,6 @@ $(document).ready(function(){
     $('#verify-submit').click(function() {
         $('#del_form').submit();
     })
-
 });
 </script>
 @endsection

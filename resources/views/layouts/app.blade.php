@@ -7,23 +7,20 @@
 </head>
 <body>
 <!-- Navigation -->
-@include('includes.nav_demo')
+@if (Request::is('admin*'))
+    @include('includes.nav_admin')
+@elseif (Request::is('demo*'))
+    @include('includes.nav_demo')
+@else
+    @include('includes.nav_home')
+@endif
 
 <!-- Page Content -->
 @yield('content')
 
 <!-- Page Footer -->
 <footer id="footer">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-6">
-                Developers API here
-            </div>
-            <div class="col-lg-6">
-
-            </div>
-        </div>
-    </div>
+@include('includes.footer')
 </footer>
 
 <!-- Script Section -->
