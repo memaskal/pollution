@@ -1,7 +1,7 @@
 <?php
 
 namespace App;
-
+use DB;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
@@ -12,7 +12,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password', 'api_token'
     ];
 
     /**
@@ -24,12 +24,18 @@ class User extends Authenticatable
         'password', 'remember_token', 'api_token'
     ];
 
-    /**Check if user is an admin
+    /**
+     * Check if user is an admin
      * @return bool
      */
     public function isAdmin()
     {
-        DB::table('admins')->select('id')->where(['id' => $this->id]);
-        return false;
+        $result = DB::table('admins')->where('id', $this->id)->first();
+        return (count($result) == 1);
+    }
+
+
+    public static function getApiKeysTotal() {
+        return DB::table('users')->count('api_token');
     }
 }

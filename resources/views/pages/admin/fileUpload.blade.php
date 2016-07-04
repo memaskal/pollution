@@ -21,7 +21,7 @@
             @endif
 
             <form action="file-upload" method="post" enctype="multipart/form-data" role="form">
-                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                {{ csrf_field() }}
 
                 {{--<div class="form-group">
                     <label for="year">Year</label>

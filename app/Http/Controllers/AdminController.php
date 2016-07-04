@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Constants;
 use App\Measurement;
 use App\Station;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
@@ -83,11 +84,18 @@ class AdminController extends Controller
             ->withInput();
     }
 
+
+    public function getStatistics() {
+        return ['total_req' => \App\Statistics::getRequestsTotal(),
+                'total_keys' => \App\Statistics::getAPIKeysTotal(),
+                'top_ten'  => \App\Statistics::getTopTenAPIKeys(),
+                'status' => 'OK',
+        ];
+    }
+
     public function getIndex()
     {
-        return view('admin', ['gmap_key' => \App\Constants::GMAP_KEY,
-                            'pol_types' => \App\Constants::POL_TYPES,
-                            'stations' => \App\Station::getStations()]);
+        return view('pages.admin.statistics');
     }
 
 }

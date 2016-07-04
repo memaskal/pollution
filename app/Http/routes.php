@@ -14,16 +14,20 @@
 /**
  * Enables api middleware for throttle in 60 connections/s
  */
-Route::group(['middleware' => 'api'], function () {
-    Route::get('api/{code}', 'ApiController@handle')->where('code', '[0-9]+');
+Route::group(['prefix' => 'api'], function () {
+    Route::get('/{code}',  [
+            'middleware' => 'api',
+            'uses' => 'ApiController@handle'
+    ])->where('code', '[0-9]+');
 });
 
 
-Route::group(['prefix' => 'admin'], function () {
+Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function () {
 
-    // Index page
+    // Index page with statistics
     Route::get('/', 'AdminController@getIndex');
-
+    Route::get('/stats', 'AdminController@getStatistics');
+    
     // File upload
     Route::get('/file-upload', 'AdminController@getUploadFile');
     Route::post('/file-upload', 'AdminController@postUploadFile');
@@ -51,3 +55,7 @@ Route::group(['prefix' => 'demo'], function () {
     Route::get('/reqAbsValue', 'DemoRequestsController@getAbsValue');
     Route::get('/reqAvgValue', 'DemoRequestsController@getAvgValue');
 });
+
+
+Route::auth();
+Route::get('/', 'HomeController@index');

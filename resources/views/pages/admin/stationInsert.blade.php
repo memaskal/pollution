@@ -21,7 +21,7 @@
                 @endif
 
                 <form action="station-insert" method="post">
-                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                    {{ csrf_field() }}
 
                     <div class="form-group">
                         <label for="st_codeInput">Station Code</label>

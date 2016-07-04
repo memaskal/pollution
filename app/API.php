@@ -7,7 +7,6 @@ use DB;
 
 abstract class API
 {
-
     const STATION_REQ    = 1;
     const ABS_VALUE_REQ  = 2;
     const AVG_VALUE_REQ  = 3;
@@ -16,9 +15,10 @@ abstract class API
 
     protected static function newRequest($user_id, $req_code) {
         // log the request to database
-        DB::table('requests')->insert(
-            ['user_id' => $user_id, 'request_type' => $req_code]
-        );
+        $request = new APIRequest();
+        $request->user_id = $user_id;
+        $request->request_type = $req_code;
+        $request->save();
     }
 
     public static function exec(Request $request, $req_type, $user) {
@@ -53,7 +53,7 @@ abstract class API
         $query = DB::table('measurements')
             ->join('measurement_values', 'measurement_id', '=', 'measurements.id')
             ->join('stations', 'station_id', '=', 'stations.id')
-            ->select('latitude', 'longitude', DB::raw('value as abs'))
+            ->select('latitude', 'longitude', 'value as abs')
             ->where('pollution_type', '=', $pol_type)
             ->where('date', '=', $date)
             ->where('hour', '=', $hour);

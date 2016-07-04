@@ -16,7 +16,7 @@ class CreateRequestsTable extends Migration
 
             $table->unsignedInteger('user_id');
             $table->unsignedInteger('request_type');
-            $table->timestamp('time');
+            $table->unsignedInteger('total')->default(0);
 
             $table->foreign('user_id')->references('id')->on('users')
                 ->onDelete('cascade')
@@ -25,7 +25,7 @@ class CreateRequestsTable extends Migration
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
 
-            $table->primary(['user_id', 'request_type', 'time']);
+            $table->primary(['user_id', 'request_type']);
         });
     }
 

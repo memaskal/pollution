@@ -16,7 +16,7 @@
             <div class="alert alert-warning alert-dismissible" role="alert">
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <strong>Warning!</strong> Deleting a station will result in deletion of every
-                measurement at this station. Proceed with conscious!!!
+                measurement at that station. Proceed with conscious!!!
             </div>
         @else
             <div class="alert alert-danger">
@@ -32,6 +32,7 @@
     <div class="row">
         <div class="col-md-12">
         @if (count($stations) > 0)
+            <h3>Measurement Stations</h3>
             <table id="table" class="table table-hover">
                 <tr><th>ID</th><th>Name</th><th>Lat</th><th>Lng</th></tr>
                 @foreach($stations as $station)
@@ -42,7 +43,7 @@
             No entries to show :'(
         @endif
         <form action="station-delete" method="post" role="form" id="del_form">
-            <input type="hidden" name="_token" value="{{ csrf_token() }}">
+            {{ csrf_field() }}
             <input type="hidden" name="_method" value="DELETE">
             <input type="hidden" name="st_code" value="" id="st_code">
         </form>
