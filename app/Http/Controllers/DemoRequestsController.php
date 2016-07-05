@@ -41,23 +41,23 @@ class DemoRequestsController extends Controller
 
 
     public function getAbsValue(Request $request) {
-        $prams  = '';
+        $params = '';
         $fields = ['pol_type', 'st_code', 'date', 'hour'];
         foreach ($fields as $field) {
             $value = $request->input($field, '');
-            $prams.="&$field=$value";
+            $params.="&$field=$value";
         }
-        return $this->makeRequest($this->ABS_VALUE_REQ, $prams);
+        return $this->makeRequest($this->ABS_VALUE_REQ, $params);
     }
 
 
     public function getAvgValue(Request $request) {
-        $prams  = '';
+        $params = '';
         $fields = ['pol_type', 'st_code', 'sdate', 'fdate'];
         foreach ($fields as $field) {
             $value = $request->input($field,'');
-            $prams.="&$field=$value";
+            $params.="&$field=$value";
         }
-        return $this->makeRequest($this->AVG_VALUE_REQ, $prams);
+        return $this->makeRequest($this->AVG_VALUE_REQ, $params);
     }
 }

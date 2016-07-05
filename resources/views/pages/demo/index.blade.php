@@ -92,3 +92,5 @@
         src="https://maps.googleapis.com/maps/api/js?key={{ $gmap_key }}&libraries=visualization&callback=initMap">
 </script>
 @endsection
+
+{{-- TODO: Kanonikopo;ihsh metrhsewn opws leei sto forum --}}

@@ -3,7 +3,7 @@
         <div class="col-md-4">
             <a href="/demo"> Demo site </a>
         </div>
-        <div class="col-md-4 col-md-offset-4">
+        <div class="col-md-4 col-md-offset-4 text-right">
             Project Web - Copyright &copy; {{ date("Y") }}
         </div>
     </div>

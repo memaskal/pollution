@@ -21,15 +21,14 @@ class UsersSeeder extends Seeder
 
         DB::table('users')->insert([
             'id' => 2,
-            'name' => 'admin2',
-            'email' => 'admin2@gmail.com',
-            'password' => bcrypt('admin2'),
+            'name' => 'user',
+            'email' => 'user@gmail.com',
+            'password' => bcrypt('user'),
             'api_token' => 666666,
         ]);
 
         DB::table('admins')->insert([
             ['id' => 1],
-            ['id' => 2],
         ]);
 
         // Create 20 additional users

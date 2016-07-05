@@ -25,13 +25,13 @@
 
                     <div class="form-group">
                         <label for="st_codeInput">Station Code</label>
-                        <input type="text" class="form-control" name="st_code" id="st_codeInput"
-                               maxlength="5" placeholder="PAT" required value="{{ old('st_code') }}"/>
+                        <input type="text" class="form-control" name="st_code" id="st_codeInput" autocomplete="off"
+                               maxlength="5" placeholder="PA" required value="{{ old('st_code') }}"/>
                     </div>
 
                     <div class="form-group">
                         <label for="st_nameInput">Station Name</label>
-                        <input type="text" class="form-control" name="st_name" id="st_nameInput"
+                        <input type="text" class="form-control" name="st_name" id="st_nameInput" autocomplete="off"
                                maxlength="30" placeholder="Σταθμός Πάτρας (ΠΑ.ΠΑ.)" required value="{{ old('st_name') }}"/>
                     </div>
 

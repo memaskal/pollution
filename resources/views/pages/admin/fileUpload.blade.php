@@ -1,5 +1,4 @@
 @extends('layouts.app') @section('title', ' - File Upload')
-
 @section('content')
 <div class="container">
     <div class="row">
@@ -56,4 +55,29 @@
         </div>
     </div>
 </div>
+@endsection
+@section('opt-scripts')
+<script>
+    // Helper function to automatically set
+    // the select fields to the file input value
+    $('#file').on('change', function() {
+        var filename = this.value;
+        $('#pol_typeInput option').each(function() {
+            var pollutionType = this.value;
+            var pattern = new RegExp('^' + pollutionType + '.*', 'gi');
+            if (filename.match(pattern)) {
+                $(this).parent().val(pollutionType);
+                return;
+            }
+        });
+        $('#st_codeInput option').each(function() {
+            var stationCode = this.value;
+            var pattern = new RegExp('.*' + stationCode + '[0-9]{4}', 'gi');
+            if (filename.match(pattern)) {
+                $(this).parent().val(stationCode);
+                return;
+            }
+        });
+    });
+</script>
 @endsection
