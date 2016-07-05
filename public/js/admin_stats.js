@@ -69,7 +69,10 @@ function pageRefresher () {
 
 function fetchData(url, callback) {
     $.getJSON(url, function( response ) {
-        if (response.status != 'OK') alert("Error " + response.status);
+        if (response.status != 'OK') {
+            alert("Error " + response.status);
+            return response.status;
+        }
         callback(response);
     });
 }
