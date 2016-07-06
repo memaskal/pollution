@@ -5,7 +5,13 @@ namespace App;
 use Illuminate\Http\Request;
 use DB;
 
-abstract class API
+/**
+ * Model to handle the API's logic
+ *
+ * Class API
+ * @package App
+ */
+class API
 {
     const STATION_REQ    = 1;
     const ABS_VALUE_REQ  = 2;
@@ -13,6 +19,12 @@ abstract class API
     
     const INVALID_MEASUREMENT_VALUE  = -9999;
 
+    /**
+     * Logs the API call for a the user
+     *
+     * @param $user_id
+     * @param $req_code
+     */
     protected static function newRequest($user_id, $req_code) {
         // log the request to database
         $request = new APIRequest();
@@ -21,6 +33,15 @@ abstract class API
         $request->save();
     }
 
+
+    /**
+     * Finds the appropriate API call
+     *
+     * @param Request $request
+     * @param $req_type
+     * @param $user
+     * @return array|mixed|null|static[]
+     */
     public static function exec(Request $request, $req_type, $user) {
         switch ($req_type) {
             case API::STATION_REQ:
@@ -33,13 +54,31 @@ abstract class API
         // Invalid request type
         return null;
     }
-    
+
+
+    /**
+     * Implements the first API call returning all the
+     * stations
+     *
+     * @param Request $request
+     * @param $user
+     * @return mixed
+     */
     protected static function getStations(Request $request, $user) {
         // Log request
         API::newRequest($user->id, API::STATION_REQ);
         return Station::getStations();
     }
 
+
+    /**
+     * Implements the second API call, returning a single pollution
+     * value for a given hour
+     *
+     * @param Request $request
+     * @param $user
+     * @return array|static[]
+     */
     protected static function getAbsValue(Request $request, $user) {
 
         // Log request
@@ -58,12 +97,22 @@ abstract class API
             ->where('date', '=', $date)
             ->where('hour', '=', $hour);
 
-        if ($st_code != 0) {
+        if ($st_code != '') {
             $query = $query->where('stations.id', '=', $st_code);
         }
         return $query->get();
     }
 
+
+    /**
+     * Implements the third API call, returning the average
+     * and standard deviation for given pollution type
+     * in a time period.
+     *
+     * @param Request $request
+     * @param $user
+     * @return array|static[]
+     */
     protected static function getAvgValue(Request $request, $user) {
 
         // Log request

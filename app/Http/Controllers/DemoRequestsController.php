@@ -19,9 +19,20 @@ class DemoRequestsController extends Controller
     protected $STATION_REQ    = 1;
     protected $ABS_VALUE_REQ  = 2;
     protected $AVG_VALUE_REQ  = 3;
-    
+
+    // Demo site developer API key
     protected $API_KEY = "12345";
 
+    /**
+     * Function makeRequest is called provided a parameter
+     * url to be sent to the api and the type of request.
+     * It handles possible network errors and returns a
+     * json formatted response.
+     *
+     * @param $type
+     * @param $params
+     * @return array|mixed
+     */
     protected function makeRequest( $type, $params ) {
 
         $ch = curl_init(url('api')."/$type?$params&api_token=$this->API_KEY");
@@ -34,12 +45,23 @@ class DemoRequestsController extends Controller
         return $response;
     }
 
-
+    /**
+     * Sets the parameters for the first API call
+     *
+     * @param Request $request
+     * @return array|mixed
+     */
     public function getStations(Request $request) {
         return $this->makeRequest($this->STATION_REQ, '');
     }
 
 
+    /**
+     * Sets the parameters for the second API call
+     *
+     * @param Request $request
+     * @return array|mixed
+     */
     public function getAbsValue(Request $request) {
         $params = '';
         $fields = ['pol_type', 'st_code', 'date', 'hour'];
@@ -51,6 +73,12 @@ class DemoRequestsController extends Controller
     }
 
 
+    /**
+     * Sets the parameters for the third API call
+     *
+     * @param Request $request
+     * @return array|mixed
+     */
     public function getAvgValue(Request $request) {
         $params = '';
         $fields = ['pol_type', 'st_code', 'sdate', 'fdate'];

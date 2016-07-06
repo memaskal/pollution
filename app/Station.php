@@ -7,6 +7,12 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Validator;
 
+/**
+ * Model representing a station instance.
+ *
+ * Class Station
+ * @package App
+ */
 class Station
 {
     public $id;
@@ -14,6 +20,13 @@ class Station
     public $latitude;
     public $longitude;
 
+    /**
+     * Returns all the stations limited to a
+     * pagination limit(optional)
+     *
+     * @param int $pagination
+     * @return mixed
+     */
     public static function getStations($pagination = 0) {
         if ($pagination <= 0) {
             return DB::table('stations')->get();
@@ -21,6 +34,16 @@ class Station
         return DB::table('stations')->paginate($pagination);
     }
 
+
+    /**
+     * Validates the insertion of a new station
+     * in the database. Returns all the error in
+     * the ErrorBag of the Validator object, or else
+     * sets the success flag to true.
+     *
+     * @param $success
+     * @return \Illuminate\Validation\Validator
+     */
     public function insert( &$success ) {
 
         $success = false;
@@ -57,9 +80,20 @@ class Station
         return $validator;
     }
 
+
+    /**
+     * Validates the deletion of a station from
+     * the database. Returns all the error in
+     * the ErrorBag of the Validator object, or else
+     * sets the success flag to true.
+     *
+     * @param $success
+     * @return \Illuminate\Validation\Validator
+     */
     public function delete( &$success ) {
 
         $success = false;
+        // The validation rules for the station-id
         $validator = Validator::make([
             'station_code' => $this->id,
         ], [

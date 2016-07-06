@@ -12,13 +12,18 @@
 */
 
 /**
- * Enables api middleware for throttle in 60 connections/s
+ * Route for all the API requests. Uses the API middleware
+ * to throttle connections to 60/s
  */
 Route::group(['prefix' => 'api', 'middleware' => 'api'], function () {
     Route::get('/{code}', 'ApiController@handle')->where('code', '[0-9]+');
 });
 
 
+/**
+ * Routes for the administrator directory. Using auth and the user-defined
+ * "admin" middleware to restrict access.
+ */
 Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function () {
 
     // Index page with statistics
@@ -35,10 +40,13 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
 
     // Station delete
     Route::get('/station-delete', 'AdminController@getDeleteStation');
-    Route::delete('/station-delete', 'AdminController@postDeleteStation');
+    Route::delete('/station-delete', 'AdminController@delDeleteStation');
 });
 
 
+/**
+ * Routes for the demo page
+ */
 Route::group(['prefix' => 'demo'], function () {
 
     // Returns the demo index page
@@ -54,5 +62,8 @@ Route::group(['prefix' => 'demo'], function () {
 });
 
 
+/**
+ * Routes for login/register/password-reset pages and user's homepage
+ */
 Route::auth();
 Route::get('/', 'HomeController@index');

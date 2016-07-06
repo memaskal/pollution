@@ -7,12 +7,18 @@ use App\Http\Requests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+/**
+ * This controller handles the user's homepage
+ *
+ * Class HomeController
+ * @package App\Http\Controllers
+ */
 class HomeController extends Controller
 {
     /**
-     * Create a new controller instance.
+     * Use auth middleware so the users
+     * are logged in before access.
      *
-     * @return void
      */
     public function __construct()
     {
@@ -20,8 +26,7 @@ class HomeController extends Controller
     }
 
     /**
-     * Show the application dashboard.
-     *
+     * Return the user's dashboard page
      * @return \Illuminate\Http\Response
      */
     public function index()

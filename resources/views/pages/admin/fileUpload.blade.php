@@ -22,11 +22,6 @@
             <form action="file-upload" method="post" enctype="multipart/form-data" role="form">
                 {{ csrf_field() }}
 
-                {{--<div class="form-group">
-                    <label for="year">Year</label>
-                    <input type="number" name="year" class="form-control" id="year" min="1987" value="{{ old('year') }}">
-                </div>--}}
-
                 <div class="form-group">
                     <label for="pol_typeInput">Pollution Type</label>
                     <select class="form-control" name="pol_type" id="pol_typeInput">

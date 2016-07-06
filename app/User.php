@@ -16,6 +16,7 @@ class User extends Authenticatable
         'name', 'email', 'password', 'api_token'
     ];
 
+
     /**
      * The attributes that should be hidden for arrays.
      *
@@ -24,6 +25,7 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token', 'api_token'
     ];
+
 
     /**
      * Check if user is an admin
@@ -36,6 +38,10 @@ class User extends Authenticatable
     }
 
 
+    /**
+     * Return how many API keys exist
+     * @return int
+     */
     public static function getApiKeysTotal() {
         return DB::table('users')->count('api_token');
     }

@@ -4,6 +4,13 @@ namespace App;
 
 use Illuminate\Support\Facades\DB;
 
+/**
+ * Simple model handling the logic
+ * of the statistics page
+ *
+ * Class Statistics
+ * @package App
+ */
 class Statistics
 {
     public static function getRequestsTotal() {
@@ -17,5 +24,4 @@ class Statistics
     public static function getTopTenAPIKeys() {
         return APIRequest::getTenTopUsers();
     }
-
 }

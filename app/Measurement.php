@@ -8,13 +8,27 @@ use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Validator;
 
+/**
+ * Model representing a measurement instance.
+ *
+ * Class Measurement
+ * @package App
+ */
 class Measurement
 {
     public $station_id;
     public $pollution_type;
     public $date;
 
-   public function insertFromFile(UploadedFile $file, &$success) {
+    /**
+     * Parses the uploaded file and inserts the
+     * measurements to the database
+     * 
+     * @param $success
+     * @param UploadedFile $file
+     * @return \Illuminate\Validation\Validator
+     */
+    public function insertFromFile(UploadedFile $file, &$success) {
 
         $success = false;
 
@@ -27,7 +41,6 @@ class Measurement
             'station_code' => $this->station_id,
             'file' => $file
         ], [
-            //'year' => 'required|numeric|between:1987,'.date("Y"),
             'pollution_type' => 'required|max:5|in:'.$pol_type_arr,
             'station_code' => 'required|max:5|exists:stations,id',
             'file' => 'required|file|mimes:csv,txt'

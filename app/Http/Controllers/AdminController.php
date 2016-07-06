@@ -8,9 +8,20 @@ use App\Station;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
+/**
+ * This controller handles all input/output requests
+ * in the administrator page
+ *
+ * Class AdminController
+ * @package App\Http\Controllers
+ */
 class AdminController extends Controller
 {
 
+    /**
+     * Returns file upload page
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function getUploadFile() {
         return view('pages.admin.fileUpload', [
             'pol_types' => Constants::POL_TYPES,
@@ -18,6 +29,12 @@ class AdminController extends Controller
         ]);
     }
 
+    
+    /**
+     * Handles file upload request
+     * @param Request $request
+     * @return $this|\Illuminate\Http\RedirectResponse
+     */
     public function postUploadFile(Request $request) {
 
         $success = false;
@@ -36,13 +53,23 @@ class AdminController extends Controller
                 ->withInput();
     }
 
-
+    
+    /**
+     * Returns insert station page
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function getInsertStation() {
         return view('pages.admin.stationInsert', [
             'gmap_key' => \App\Constants::GMAP_KEY
         ]);
     }
+
     
+    /**
+     * Handles insert station request
+     * @param Request $request
+     * @return $this|\Illuminate\Http\RedirectResponse
+     */
     public function postInsertStation(Request $request) {
         
         $success = false;
@@ -62,13 +89,24 @@ class AdminController extends Controller
                 ->withInput();
     }
 
+
+    /**
+     * Returns delete station page
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function getDeleteStation() {
         return view('pages.admin.stationDelete', [
             'stations' => Station::getStations(5)
         ]);
     }
 
-    public function postDeleteStation(Request $request) {
+
+    /**
+     * Handles station delete request
+     * @param Request $request
+     * @return $this|\Illuminate\Http\RedirectResponse
+     */
+    public function delDeleteStation(Request $request) {
 
         $success = false;
         $station = new Station();
@@ -85,6 +123,11 @@ class AdminController extends Controller
     }
 
 
+    /**
+     * Returns a json formatted response for the auto-refresh
+     * statistics page in the admin dashboard
+     * @return array
+     */
     public function getStatistics() {
         return ['total_req' => \App\Statistics::getRequestsTotal(),
                 'total_keys' => \App\Statistics::getAPIKeysTotal(),
@@ -93,6 +136,11 @@ class AdminController extends Controller
         ];
     }
 
+
+    /**
+     * Returns the index page
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function getIndex()
     {
         return view('pages.admin.statistics');

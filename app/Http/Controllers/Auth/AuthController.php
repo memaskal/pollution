@@ -57,6 +57,8 @@ class AuthController extends Controller
 
     /**
      * Create a new user instance after a valid registration.
+     * Create a random api-token using the users-email (unique)
+     * and a random string.
      *
      * @param  array  $data
      * @return User
@@ -67,7 +69,7 @@ class AuthController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
-            'api_token' => substr(md5($data['email'].str_random(32)), 0, 60),
+            'api_token' => md5($data['email'].str_random(32)),
         ]);
     }
 }
