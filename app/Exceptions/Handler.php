@@ -47,9 +47,8 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $e)
     {
-        // Return json status code of HttpException when is
-        // thrown at json -> api calls
-        if ($e instanceof HttpException && $request->wantsJson()) {
+        // Return a json response when the error occur at an API call
+        if ($e instanceof HttpException && $request->is('api*')) {
             return response()->json(['status' => $e->getStatusCode()]);
         }
         return parent::render($request, $e);
