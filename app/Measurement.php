@@ -19,6 +19,58 @@ class Measurement
     public $station_id;
     public $pollution_type;
     public $date;
+    public $hour;
+
+    const INVALID_VALUE  = -9999;
+
+    /**
+     * Returns the measurement value for a specific time in a date
+     * for a given pollution type taken at a single station or all
+     * stations
+     *
+     * @return mixed
+     */
+    public function getAbsValue() {
+
+        $query = DB::table('measurements')
+            ->join('measurement_values', 'measurement_id', '=', 'measurements.id')
+            ->join('stations', 'station_id', '=', 'stations.id')
+            ->select('latitude', 'longitude', 'value as abs')
+            ->where('pollution_type', '=', $this->pollution_type)
+            ->where('date', '=', $this->date)
+            ->where('hour', '=', $this->hour);
+
+        if ($this->station_id != '') {
+            $query = $query->where('stations.id', '=', $this->station_id);
+        }
+        return $query->get();
+    }
+
+
+    /**
+     * Returns the average value of a pollution type for a given
+     * time period in a single or more stations
+     *
+     * @param $sdate
+     * @param $fdate
+     * @return mixed
+     */
+    public function getAvgValue($sdate, $fdate) {
+
+        $query = DB::table('measurements')
+            ->select('latitude', 'longitude', DB::raw('avg(value) as avg, stddev(value) as s'))
+            ->join('measurement_values', 'measurement_id', '=', 'measurements.id')
+            ->join('stations', 'station_id', '=', 'stations.id')
+            ->groupBy('station_id')
+            ->where('pollution_type', '=', $this->pollution_type)
+            ->whereBetween('date', array($sdate, $fdate));
+
+        if ($this->station_id != '') {
+            $query = $query->where('stations.id', '=', $this->station_id);
+        }
+        return $query->get();
+    }
+
 
     /**
      * Parses the uploaded file and inserts the
@@ -111,9 +163,12 @@ class Measurement
                $insert_values = [];
                foreach ($measurements as $indx => $value) {
                    $hour = $indx + 1;
-                   array_push($insert_values, [
-                       'measurement_id' => $id, 'hour' => $hour, 'value' => $value
-                   ]);
+                   // Don't insert hours with invalid times
+                   if ( $value != Measurement::INVALID_VALUE ) {
+                       array_push($insert_values, [
+                           'measurement_id' => $id, 'hour' => $hour, 'value' => $value
+                       ]);
+                   }
                }
                DB::table('measurement_values')->insert($insert_values);
            }

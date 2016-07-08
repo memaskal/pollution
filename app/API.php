@@ -16,8 +16,6 @@ class API
     const STATION_REQ    = 1;
     const ABS_VALUE_REQ  = 2;
     const AVG_VALUE_REQ  = 3;
-    
-    const INVALID_MEASUREMENT_VALUE  = -9999;
 
     /**
      * Logs the API call for a the user
@@ -26,7 +24,7 @@ class API
      * @param $req_code
      */
     protected static function newRequest($user_id, $req_code) {
-        // log the request to database
+
         $request = new APIRequest();
         $request->user_id = $user_id;
         $request->request_type = $req_code;
@@ -43,16 +41,24 @@ class API
      * @return array|mixed|null|static[]
      */
     public static function exec(Request $request, $req_type, $user) {
+
+        $resp = null;
         switch ($req_type) {
             case API::STATION_REQ:
-                return API::getStations($request, $user);
+                $resp = API::getStations($request, $user);
+                break;
             case API::ABS_VALUE_REQ:
-                return API::getAbsValue($request, $user);
+                $resp = API::getAbsValue($request, $user);
+                break;
             case API::AVG_VALUE_REQ:
-                return API::getAvgValue($request, $user);
+                $resp = API::getAvgValue($request, $user);
+                break;
         }
-        // Invalid request type
-        return null;
+        // Log request
+        if ($resp !== null) {
+            API::newRequest($user->id, $req_type);
+        }
+        return $resp;
     }
 
 
@@ -65,8 +71,6 @@ class API
      * @return mixed
      */
     protected static function getStations(Request $request, $user) {
-        // Log request
-        API::newRequest($user->id, API::STATION_REQ);
         return Station::getStations();
     }
 
@@ -77,30 +81,17 @@ class API
      *
      * @param Request $request
      * @param $user
-     * @return array|static[]
+     * @return mixed
      */
     protected static function getAbsValue(Request $request, $user) {
 
-        // Log request
-        API::newRequest($user->id, API::ABS_VALUE_REQ);
+        $m = new Measurement();
+        $m->pollution_type = $request->pol_type;
+        $m->station_id = $request->st_code;
+        $m->date = $request->date;
+        $m->hour = $request->hour;
 
-        $pol_type = $request->pol_type;
-        $st_code  = $request->st_code;
-        $date     = $request->date;
-        $hour     = (int)$request->hour;
-
-        $query = DB::table('measurements')
-            ->join('measurement_values', 'measurement_id', '=', 'measurements.id')
-            ->join('stations', 'station_id', '=', 'stations.id')
-            ->select('latitude', 'longitude', 'value as abs')
-            ->where('pollution_type', '=', $pol_type)
-            ->where('date', '=', $date)
-            ->where('hour', '=', $hour);
-
-        if ($st_code != '') {
-            $query = $query->where('stations.id', '=', $st_code);
-        }
-        return $query->get();
+        return $m->getAbsValue();
     }
 
 
@@ -111,30 +102,16 @@ class API
      *
      * @param Request $request
      * @param $user
-     * @return array|static[]
+     * @return mixed
      */
     protected static function getAvgValue(Request $request, $user) {
 
-        // Log request
-        API::newRequest($user->id, API::AVG_VALUE_REQ);
+        $m = new Measurement();
+        $m->pollution_type = $request->pol_type;
+        $m->station_id = $request->st_code;
+        $sdate = $request->sdate;
+        $fdate = $request->fdate;
 
-        $pol_type = $request->pol_type;
-        $st_code  = $request->st_code;
-        $sdate    = $request->sdate;
-        $fdate    = $request->fdate;
-
-        $query = DB::table('measurements')
-            ->select('latitude', 'longitude', DB::raw('avg(value) as avg, stddev(value) as s'))
-            ->join('measurement_values', 'measurement_id', '=', 'measurements.id')
-            ->join('stations', 'station_id', '=', 'stations.id')
-            ->groupBy('station_id')
-            ->where('pollution_type', '=', $pol_type)
-            ->where('value', '<>', API::INVALID_MEASUREMENT_VALUE)
-            ->whereBetween('date', array($sdate, $fdate));
-
-        if ($st_code != '') {
-            $query = $query->where('stations.id', '=', $st_code);
-        }
-        return $query->get();
+        return $m->getAvgValue($sdate, $fdate);
     }
 }
