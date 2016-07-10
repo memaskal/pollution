@@ -36,7 +36,10 @@ class DemoRequestsController extends Controller
     protected function makeRequest( $type, $params ) {
 
         $ch = curl_init(url('api')."/$type?$params&api_token=$this->API_KEY");
+        // return response as a string
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        // wait max 5 seconds for response
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT , 5);
 
         if(($response = curl_exec($ch)) === false) {
             $response = ['status' => 'SERVER_ERROR'];

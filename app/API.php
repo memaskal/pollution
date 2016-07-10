@@ -38,7 +38,7 @@ class API
      * @param Request $request
      * @param $req_type
      * @param $user
-     * @return array|mixed|null|static[]
+     * @return mixed|null
      */
     public static function exec(Request $request, $req_type, $user) {
 

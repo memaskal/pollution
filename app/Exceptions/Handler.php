@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use Exception;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -48,8 +49,10 @@ class Handler extends ExceptionHandler
     public function render($request, Exception $e)
     {
         // Return a json response when the error occur at an API call
-        if ($e instanceof HttpException && $request->is('api*')) {
-            return response()->json(['status' => $e->getStatusCode()]);
+        if ($request->is('api*')) {
+            // Every error is a server error until proven a user one :P
+            $status = ($e instanceof HttpException) ? $e->getStatusCode() : 503;
+            return response()->json(['status' => $status]);
         }
         return parent::render($request, $e);
     }
