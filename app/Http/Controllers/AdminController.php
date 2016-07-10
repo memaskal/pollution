@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Station;
+use App\Statistics;
 use App\Constants;
 use App\Measurement;
-use App\Station;
+
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
@@ -37,12 +39,13 @@ class AdminController extends Controller
      */
     public function postUploadFile(Request $request) {
 
-        $success = false;
-        $meas = new Measurement();
-        $meas->station_id = $request->input('st_code');
-        $meas->pollution_type = $request->input('pol_type');
+        $m = new Measurement();
+        $m->station_id = $request->input('st_code');
+        $m->pollution_type = $request->input('pol_type');
         $inputFile = $request->file('file');
-        $errors = $meas->insertFromFile($inputFile, $success);
+
+        $success = false;
+        $errors = $m->insertFromFile($inputFile, $success);
 
         if ($success) {
             return redirect('admin/file-upload')
@@ -60,7 +63,7 @@ class AdminController extends Controller
      */
     public function getInsertStation() {
         return view('pages.admin.stationInsert', [
-            'gmap_key' => \App\Constants::GMAP_KEY
+            'gmap_key' => Constants::GMAP_KEY
         ]);
     }
 
@@ -71,14 +74,15 @@ class AdminController extends Controller
      * @return $this|\Illuminate\Http\RedirectResponse
      */
     public function postInsertStation(Request $request) {
-        
+
+        $s = new Station();
+        $s->id = $request->input('st_code');
+        $s->name = $request->input('st_name');
+        $s->latitude = $request->input('st_lat');
+        $s->longitude = $request->input('st_lng');
+
         $success = false;
-        $station = new Station();
-        $station->id = $request->input('st_code');
-        $station->name = $request->input('st_name');
-        $station->latitude = $request->input('st_lat');
-        $station->longitude = $request->input('st_lng');
-        $errors = $station->insert($success);
+        $errors = $s->insert($success);
 
         if ($success) {
             return redirect('admin/station-insert')
@@ -108,10 +112,11 @@ class AdminController extends Controller
      */
     public function delDeleteStation(Request $request) {
 
+        $s = new Station();
+        $s->id = $request->input('st_code');
+
         $success = false;
-        $station = new Station();
-        $station->id = $request->input('st_code');
-        $errors = $station->delete($success);
+        $errors = $s->delete($success);
 
         if ($success) {
             return redirect('admin/station-delete')
@@ -126,14 +131,15 @@ class AdminController extends Controller
     /**
      * Returns a json formatted response for the auto-refresh
      * statistics page in the admin dashboard
-     * @return array
+     * @return \Illuminate\Http\JsonResponse
      */
     public function getStatistics() {
-        return ['total_req' => \App\Statistics::getRequestsTotal(),
-                'total_keys' => \App\Statistics::getAPIKeysTotal(),
-                'top_ten'  => \App\Statistics::getTopTenAPIKeys(),
-                'status' => 'OK',
-        ];
+        return response()->json([
+            'total_req' => Statistics::getRequestsTotal(),
+            'total_keys' => Statistics::getAPIKeysTotal(),
+            'top_ten'  => Statistics::getTopTenAPIKeys(),
+            'status' => 'OK',
+        ]);
     }
 
 

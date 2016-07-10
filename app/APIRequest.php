@@ -74,7 +74,7 @@ class APIRequest
             ->join('request_types', 'request_type', '=', 'request_types.id')
             ->groupBy('request_type');
 
-        if ($userId != -1) {
+        if ($userId !== -1) {
             $query = $query->where('user_id', $userId);
         }
         return $query->get();

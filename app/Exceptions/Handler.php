@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use App\Http\Controllers\ApiController;
 use Exception;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Validation\ValidationException;
@@ -52,7 +53,7 @@ class Handler extends ExceptionHandler
         if ($request->is('api*')) {
             // Every error is a server error until proven a user one :P
             $status = ($e instanceof HttpException) ? $e->getStatusCode() : 503;
-            return response()->json(['status' => $status]);
+            return ApiController::error($status);
         }
         return parent::render($request, $e);
     }
