@@ -132,7 +132,7 @@ $('#submit-modal').click(function() {
 
             // draw the new heatmap's point weight either with
             // the absolute value or the average
-            setPointWeight(marker.pindx, polType, ((activeWindow === 'req_2') ? val.abs : val.avg));
+            setPointWeight(marker, polType, ((activeWindow === 'req_2') ? val.abs : val.avg));
         });
     });
 
@@ -141,8 +141,9 @@ $('#submit-modal').click(function() {
 });
 
 
-function setPointWeight(index, polType, value) {
+function setPointWeight(marker, polType, value) {
 
+    var index = marker.pindx;
     // Get the point in pos: index
     var heatPoint = points.removeAt(index);
     var zone = dangerZones[polType];
@@ -158,7 +159,7 @@ function setPointWeight(index, polType, value) {
     else {
         // Determine the zone we fall in and calculate the 
         // weight for this point
-        for ( i = 0; i < zone.length; ++i) {
+        for (var i = 0; i < zone.length; ++i) {
             if ( value <= zone[i] ) {
                 // Split intensity to equal color zones
                 heatPoint.weight = i * (heatmap.maxIntensity / zone.length);

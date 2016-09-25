@@ -20,7 +20,7 @@ class DemoRequestsController extends Controller
     protected $ABS_VALUE_REQ  = 2;
     protected $AVG_VALUE_REQ  = 3;
 
-    // Demo site developer API key
+    // Demo site developer's API key
     protected $API_KEY = "12345";
 
     /**
@@ -33,7 +33,7 @@ class DemoRequestsController extends Controller
      * @param $params
      * @return array|mixed
      */
-    protected function makeRequest( $type, $params ) {
+    protected function makeRequest($type, $params = '') {
 
         $ch = curl_init(url('api')."/$type?$params&api_token=$this->API_KEY");
         // return response as a string
@@ -55,7 +55,7 @@ class DemoRequestsController extends Controller
      * @return array|mixed
      */
     public function getStations(Request $request) {
-        return $this->makeRequest($this->STATION_REQ, '');
+        return $this->makeRequest($this->STATION_REQ);
     }
 
 

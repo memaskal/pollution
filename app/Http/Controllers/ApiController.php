@@ -36,10 +36,10 @@ class ApiController extends Controller
         // Get user by its API-key
         $user = Auth::guard('api')->user();
 
-        // Check if we have a valid user
-        if ( !$user ) {
-            return self::error('INV_API_KEY');
-        }
+         // Check if we have a valid user
+         if ( !$user ) {
+             return self::error('INV_API_KEY');
+         }
 
         // Request the data
         $response = $this->exec($request, intval($code), $user);

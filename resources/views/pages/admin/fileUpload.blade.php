@@ -59,18 +59,16 @@
         var filename = this.value;
         $('#pol_typeInput option').each(function() {
             var pollutionType = this.value;
-            var pattern = new RegExp('^' + pollutionType + '.*', 'gi');
+            var pattern = new RegExp(pollutionType + '(#|[a-zA-Z]).*', 'i');
             if (filename.match(pattern)) {
                 $(this).parent().val(pollutionType);
-                return;
             }
         });
         $('#st_codeInput option').each(function() {
             var stationCode = this.value;
-            var pattern = new RegExp('.*' + stationCode + '[0-9]{4}', 'gi');
+            var pattern = new RegExp('.*' + stationCode + '[0-4]{4}.*', 'i');
             if (filename.match(pattern)) {
                 $(this).parent().val(stationCode);
-                return;
             }
         });
     });

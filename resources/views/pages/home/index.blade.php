@@ -10,7 +10,7 @@
     <div class="row">
         <div class="col-md-4">
             <h4>API usage for your key: {{ $user->api_token }} </h4>
-            <div id="req_types" style="height:250px"></div>
+            <div id="req_types" style="height:250px"> </div>
         </div>
     </div>
 </div>
@@ -21,7 +21,13 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
 <script>
     var donutChart;
+
     function drawDonutChart( contents ) {
+
+        if ( contents.length == 0 ) {
+            $('#req_types').html('<p>No data available :(</p>');
+        }
+
         var data = [];
         $.each(contents, function( index, value ) {
             data.push({ label : value.description,
