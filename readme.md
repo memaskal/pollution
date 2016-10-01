@@ -1,10 +1,8 @@
 # Environmental Monitoring
 
 This simple web app is a full functional API enabled website for environmental monitoring, assigned as a university project. 
-The web app is responsible for data visualization of various atmospheric pollutants. The last, is done using Google map technologies 
-on a simple demo site, the data provided to the app was taken from national pollution stations across the country. 
-The data of which could be found on this link, [ypeka.gr](http://www.ypeka.gr/Default.aspx?tabid=495&language=el-GR). 
-Finally the quality of those measurements can be viewed from here [airqualitynow.eu](http://www.airqualitynow.eu/about_indices_definition.php).
+The web app is responsible for data visualization of various atmospheric pollutants. The last, is done using Google map technologies on a simple demo site. The data provided to the app were taken from national pollution stations across the country, which could be found here: [ypeka.gr](http://www.ypeka.gr/Default.aspx?tabid=495&language=el-GR). 
+Finally the quality of those measurements can be found here: [airqualitynow.eu](http://www.airqualitynow.eu/about_indices_definition.php)
 
 ## App's architecture
 
@@ -19,8 +17,7 @@ pollution stations and upload measurement files for each station, as they are pr
 
 ### Demo route
 
-This route contains the demo site demonstrating the basic functionality of the api. The demo site could be developed by any registered user, 
-using his api key (given at his registration), to query the api as he wish.  
+This route contains the demo site demonstrating the basic functionality of the api. The demo site could be developed and hosted by any registered user, using his api key (given at his registration), to query the api appropriately.  
 
 ### API route
 
@@ -32,8 +29,8 @@ This route responds to all the api queries. Basically the functions that are sup
 
 ### Home route
 
-Since a user is registered to the api, can view his usage statistics and possibly the cost($$) of his api requests, from the home route.
-Moreover this route handles register/login requests as well as password retrievals.
+A registered user, can view his usage statistics and possibly the cost($$) of his api requests, from the home route of the app.
+Moreover this route handles register-login requests as well as password retrievals.
 
 ## API Syntax
 
@@ -46,19 +43,19 @@ Stations request : http://host.com/api/1?api_token=my_token
 	"values":[
 		{
 			"id":"APT",
-			"name":"Α.Π.Θ.",
+			"name":"Ξ‘.Ξ .Ξ.",
 			"latitude":"40.62835298292301",
 			"longitude":"22.95875031376954"
 		},
 		{
 			"id":"ATH",
-			"name":"Αθήνας",
+			"name":"Ξ‘ΞΈΞ®Ξ½Ξ±Ο‚",
 			"latitude":"37.98390841836567",
 			"longitude":"23.72839591979982"
 		},
 		{
 			"id":"PIR",
-			"name":"Πειραιάς I",
+			"name":"Ξ ΞµΞΉΟΞ±ΞΉΞ¬Ο‚ I",
 			"latitude":"37.93281463524375",
 			"longitude":"23.64539764404299"
 		}
