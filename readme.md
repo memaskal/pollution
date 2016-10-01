@@ -119,4 +119,4 @@ php artisan migrate
 ```
 
 Create your `.env` file (example is provided) and you are ready to go. If you want to have a quick demo, you can import the sql dump 
-of this app provided on the files above, or you can execute the `php artisan db:seed command` to fill the database with test data.
+of this app provided on the files above, or you can execute the `php artisan db:seed` command to fill the database with test data.
